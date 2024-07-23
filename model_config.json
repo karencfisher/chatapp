@@ -1,0 +1,7 @@
+{
+    "provider": "groqChat",
+    "model": "llama3-8b-8192",
+    "context_window": 8192,
+    "max_response": 512,
+    "temperature": 0.5
+}

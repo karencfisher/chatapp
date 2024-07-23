@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic chatbot</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"> 
+    <script src="../static/script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+    <main id="container">
+        <header>
+            <button id="drawer-button">
+                <span class="material-icons-outlined" id="hamburger">menu</span>
+            </button>
+            <div id="title">
+                <h1>Chat using {{ model }}</h1>
+            </div>
+        </header>
+        <div id="conversation"></div>
+        <button id="prompt-button">
+            <span class="material-icons-outlined">chat</span>
+        </button>
+    </main>
+
+    <div id="drawer" data-open="false">
+        <fieldset id="download-fs">
+            <legend>Download Chat</legend>
+            <label for="chat-title">Title</label>
+            <input type="text" id="chat-title" value="Chat" placeholder="Title your chat">
+            <button id="download-button">
+                <span class="material-icons-outlined">file_download</span>
+            </button>
+        </fieldset>
+        <button id="close-button">
+            <span class="material-icons-outlined">close</span>
+        </button>
+    </div>
+
+    <div id="prompt" data-open="false">
+        <fieldset>
+            <legend>User Message</legend>
+                <textarea id="prompt-text" rows="6" placeholder="Enter your prompt here" 
+                    aria-label="prompt" tabindex="-1"></textarea>
+        </fieldset id="download-fs">
+        <div id="buttons">
+            <button class="button" id="send-button" tabindex="-1">
+                <span class="material-icons-outlined">send</span>
+            </button>
+            <button class="button" id="cancel-button" tabindex="-1">
+                <span class="material-icons-outlined">close</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="error-msg" data-open="false">
+        <span class="material-icons-outlined" id="msg-icon">error_outline</span>
+        <div id="error-txt">An error happened</div>
+    </div>
+
+    <div id="mask" data-open="false"></div> 
+</body>
+</html>

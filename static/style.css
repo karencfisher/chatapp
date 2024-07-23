@@ -1,0 +1,207 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: rgb(11, 80, 107);
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#drawer-button {
+    background-color: transparent;
+    border-style: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: normal;
+}
+
+#container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    height: 90vh;
+    padding: 5px;
+    background-color: aquamarine;
+}
+
+#conversation {
+    display: flex;
+    flex-direction: column;
+    border-style: solid;
+    border-width: 1px;
+    flex: 1;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+#conversation > div {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    width: 80%;
+    margin: 2px;
+    padding: 5px;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-break: keep-all;
+    word-wrap: break-word;
+}
+
+.AI-message {
+    align-self: flex-start;
+    background-color: rgb(230, 161, 121);
+}
+
+.user-message {
+    align-self: flex-end;
+    background-color: rgb(174, 230, 129);
+}
+
+#drawer {
+    position: fixed;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    top: 20%;
+    left: -600px;
+    width: 220px;
+    background-color: rgb(174, 230, 129);
+    z-index: 999;
+    padding: 5px;
+    z-index: 9999;
+    transition: left .5s;
+}
+
+#drawer[data-open = "true"] {
+    left: 20%;
+}
+
+#prompt {
+    position: fixed;
+    top: -200px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-items: center;
+    width: 80%;
+    padding: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: rgb(174, 230, 129);
+    box-shadow: 8px 8px 8px rgba(20, 20, 20, .5), 5px 5px 5px rgba(20, 20, 20, .8);
+    z-index: 9999;
+    transition: top .5s;
+}
+
+#prompt[data-open="true"] {
+    top: 20%;
+}
+
+fieldset {
+    margin: 0;
+}
+
+#close-button {
+    width: fit-content;
+    align-self: flex-end;
+}
+
+#prompt-text {
+    max-width: 100%;
+    min-width: 100%;
+    resize: vertical;
+}
+
+#buttons {
+    align-self: flex-end;
+}
+
+#mask {
+    position: fixed;
+    display: none;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(20, 20, 20, .4);
+    z-index: 999;
+}
+
+#mask[data-open="true"] {
+    display: block;
+}
+
+#prompt-button {
+    position: relative;
+    width: fit-content;         
+    bottom: 60px;
+    left: 85%;
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    padding: 5px;
+    background-color: rgb(174, 230, 129);
+    z-index: 999;
+    box-shadow: 8px 8px 8px rgba(20, 20, 20, .5), 5px 5px 5px rgba(20, 20, 20, .8);
+}
+
+#prompt-button:hover, #prompt-button:focus {
+    background-color: rgb(233, 236, 13);
+}
+
+#error-msg {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    top: -600px;
+    z-index: 9999;
+    width: fit-content;
+    height: 50px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: rgb(230, 161, 121);
+    padding: 10px;
+}
+
+#error-msg[data-open="true"] {
+    top: 20%;
+}
+
+#error-msg > span {
+    font-size: 2rem;
+}
+
+@media screen and (min-width: 768px) {
+    #container {
+        width: 70%;
+        height: 90vh;
+    }
+
+    #prompt {
+        width: 30%;
+    }
+
+    #prompt-button {
+        left: 92%;
+    }
+    
+    #drawer[data-open="true"] {
+        left: 40%;
+    }
+}

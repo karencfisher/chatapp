@@ -1,0 +1,6 @@
+numpy
+tiktoken
+ollama
+flask
+groq
+python-dotenv
