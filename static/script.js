@@ -1,14 +1,3 @@
-function getCookie(key) {
-    const cookies = document.cookie.split('; ');
-    for (const cookie of cookies) {
-      const [name, value] = cookie.split('=');
-      if (name === key) {
-        return value;
-      }
-    }
-    return null;
-  }
-
 const conversation = document.getElementById("conversation");
 function addMessage(msg, role) {
     const htmlContent = marked.parse(msg);
@@ -101,6 +90,16 @@ addEventListener("load", async () => {
     }
     catch(error) {
         displayError("Error", `Error fetching conversation. Might be offline?`);
+    }
+});
+
+addEventListener("unload", async () => {
+    try {
+        await fetch('/close_session');
+        document.cookie = "chatsession=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    }
+    catch(error) {
+        displayError("Error", `Error closing session.\n${error}`);
     }
 });
 

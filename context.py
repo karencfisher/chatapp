@@ -19,8 +19,8 @@ class Contexts:
     def __init__(self):
         self.contexts = {}
 
-    def initContext(self, session_id, kwargs):
-        self.contexts[session_id] = Context(**kwargs)
+    def init_context(self, session_id, pretext, num_response_tokens, max_context_tokens):
+        self.contexts[session_id] = Context(pretext, num_response_tokens, max_context_tokens)
 
     def __retrieve_context(self, session_id):
         context = self.contexts.get(session_id)
@@ -34,12 +34,17 @@ class Contexts:
     def get_full_conversation(self, session_id):
         return self.__retrieve_context(session_id).get_full_conversation()
     
-    def add(self, session_id, kwargs):
-        self.__retrieve_context(session_id).add(**kwargs)
+    def add(self, session_id, role, text):
+        self.__retrieve_context(session_id).add(role, text)
+
+    def remove(self, session_id):
+        context =  self.__retrieve_context(session_id)
+        del context
+        del self.contexts[session_id]
 
 
 class Context:
-    def __init__(self, pretext, num_response_tokens=512, max_context_tokens=4096):
+    def __init__(self, pretext, num_response_tokens, max_context_tokens):
         self.__max_context_tokens = max_context_tokens
         self.__num_response_tokens = num_response_tokens
         self.__context = []
@@ -86,4 +91,3 @@ class Context:
             message = {'n_tokens': n_tokens, 
                        'message': {'role': role, 'content': text}}
             self.__context.append(message)
-
