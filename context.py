@@ -37,10 +37,8 @@ class Contexts:
     def add(self, session_id, role, text):
         self.__retrieve_context(session_id).add(role, text)
 
-    def remove(self, session_id):
-        context =  self.__retrieve_context(session_id)
-        del context
-        del self.contexts[session_id]
+    def clear_session(self, session_id):
+        self.__retrieve_context(session_id).clear()
 
 
 class Context:
@@ -91,3 +89,6 @@ class Context:
             message = {'n_tokens': n_tokens, 
                        'message': {'role': role, 'content': text}}
             self.__context.append(message)
+
+    def clear(self):
+        self.__context = []

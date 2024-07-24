@@ -33,19 +33,19 @@ def conversation():
     except Exception as ex:
         return jsonify({"Error": str(ex)})
 
-@app.route('/close_session')
+@app.route('/clear_session')
 def close_session():
     try:
         session_id = request.cookies.get('chatsession')
-        llm.removeSession(session_id)
-        return jsonify({"success": "closed session"}), 200
+        llm.clear_session(session_id)
+        return jsonify({"success": "cleared session"}), 200
     except Exception as ex:
         return jsonify({"Error": str(ex)})
 
-def closeServer():
-    llm.closeServer()
+def close_server():
+    llm.close_server()
 
 if __name__ == '__main__':
     llm = Chat()
-    atexit.register(closeServer)
+    atexit.register(close_server)
     app.run(debug=True, host='0.0.0.0', port=5005)

@@ -60,10 +60,10 @@ class Chat:
         self.__addContext(session_id, 'assistant', ai_message)
         return ai_message
     
-    def removeSession(self, session_id):
-        self.contexts.remove(session_id)
+    def clear_session(self, session_id):
+        self.contexts.clear_session(session_id)
     
-    def closeServer(self):
+    def close_server(self):
         print('Closing model...')
         self.model.unload_model()
         print('Done!')

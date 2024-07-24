@@ -32,22 +32,37 @@ async function getResponse(prompt) {
     }
 }
 
+async function clearSession() {
+    try {
+        await fetch('/clear_session');
+    }
+    catch(error) {
+        displayError("error", "Could not clear session. Might be offline?")
+    }
+}
+
 const promptText = document.getElementById("prompt-text");
 const sendButton = document.getElementById("send-button");
 const cancelButton = document.getElementById("cancel-button");
 
-async function sendPrompt() {
+async function sendPrompt(new_chat) {
     document.body.style.cursor = 'wait';
     const prompt = promptText.value.trim();
+
+    if (new_chat) {
+        await clearSession();
+        conversation.innerHTML = "";
+    }
+
     addMessage(prompt, "user");
     let result = null;
     try {
         result = await getResponse(prompt);
+        addMessage(result, "AI");
     }
     catch(error) {
-        return;
+        displayError("error", `Error: ${error}`)
     }
-    addMessage(result, "AI");
     document.body.style.cursor = 'default';
 }
 
@@ -93,15 +108,10 @@ addEventListener("load", async () => {
     }
 });
 
-addEventListener("unload", async () => {
-    try {
-        await fetch('/close_session');
-        document.cookie = "chatsession=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-    }
-    catch(error) {
-        displayError("Error", `Error closing session.\n${error}`);
-    }
-});
+// window.addEventListener("unload", async () => {
+//     document.cookie = "chatsession=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+//     await fetch('/close_session')    
+// });
 
 sendButton.addEventListener("click", () => {
     if (promptText.value === "") {
@@ -109,7 +119,9 @@ sendButton.addEventListener("click", () => {
         return;
     }
 
-    sendPrompt();
+    const newButton = document.getElementById('new-button');
+    sendPrompt(newButton.checked);
+    newButton.checked = false;
     togglePrompt();
 });
 
