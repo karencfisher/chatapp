@@ -15,6 +15,29 @@ the most recent until fitting within the difference.
 import tiktoken as tt
 
 
+class Contexts:
+    def __init__(self):
+        self.contexts = {}
+
+    def initContext(self, session_id, kwargs):
+        self.contexts[session_id] = Context(**kwargs)
+
+    def __retrieve_context(self, session_id):
+        context = self.contexts.get(session_id)
+        if context is None:
+            raise ValueError("Invalid session_id")
+        return context
+
+    def get_context(self, session_id):
+        return self.__retrieve_context(session_id).get_context()
+    
+    def get_full_conversation(self, session_id):
+        return self.__retrieve_context(session_id).get_full_conversation()
+    
+    def add(self, session_id, kwargs):
+        self.__retrieve_context(session_id).add(**kwargs)
+
+
 class Context:
     def __init__(self, pretext, num_response_tokens=512, max_context_tokens=4096):
         self.__max_context_tokens = max_context_tokens
