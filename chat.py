@@ -1,7 +1,7 @@
 import json
 import os
 
-from context import Context
+from context import Contexts
 import importlib
 
 
@@ -25,10 +25,8 @@ class Chat:
                 profile = PROFILE.read()
             self.pretext += 'User profile:\n\n' + profile
         
-        # setup conversation context
-        self.context = Context(self.pretext, 
-                               num_response_tokens=self.config['max_response'],
-                               max_context_tokens=self.config['context_window'])
+        # setup conversation contexts
+        self.contexts = Contexts()
 
         # load or connect to model
         print(f'Loading model {self.config["model"]}...')
@@ -39,24 +37,33 @@ class Chat:
     def getModel(self):
         return self.config["model"]
 
-    def __addContext(self, role, text):
-        self.context.add(role=role, 
-                         text=text)
+    def __addContext(self, session_id, role, text):
+        self.contexts.add(session_id, role, text)
         
-    def __getContext(self):
-        return self.context.get_context()
+    def __getContext(self, session_id):
+        return self.contexts.get_context(session_id)
     
-    def get_conversation(self):
-        return self.context.get_full_conversation()
+    def get_conversation(self, session_id):
+        try:
+            return self.contexts.get_full_conversation(session_id)
+        except ValueError:
+            self.contexts.init_context(session_id, 
+                                      self.pretext, 
+                                      self.config['max_response'],
+                                      self.config['context_window'])
+            return []
 
-    def chat(self, message):
-        self.__addContext('user', message)
-        prompt = self.__getContext()
+    def chat(self, session_id, message):
+        self.__addContext(session_id, 'user', message)
+        prompt = self.__getContext(session_id)
         ai_message = self.model.chat(prompt)
-        self.__addContext('assistant', ai_message)
+        self.__addContext(session_id, 'assistant', ai_message)
         return ai_message
     
-    def closeServer(self):
+    def clear_session(self, session_id):
+        self.contexts.clear_session(session_id)
+    
+    def close_server(self):
         print('Closing model...')
         self.model.unload_model()
         print('Done!')

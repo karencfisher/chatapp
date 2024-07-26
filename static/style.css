@@ -78,7 +78,7 @@ pre {
     flex-direction: column;
     top: 20%;
     left: -600px;
-    width: 220px;
+    width: 33%;
     background-color: rgb(174, 230, 129);
     z-index: 999;
     padding: 5px;
@@ -87,12 +87,22 @@ pre {
 }
 
 #drawer[data-open = "true"] {
-    left: 20%;
+    left: 10%;
+}
+
+#chat-field {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+}
+
+#chat-title {
+    flex: 1;
 }
 
 #prompt {
     position: fixed;
-    top: -200px;
+    top: -600px;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -202,6 +212,6 @@ fieldset {
     }
     
     #drawer[data-open="true"] {
-        left: 40%;
+        left: 30%;
     }
 }

@@ -29,11 +29,12 @@
     <div id="drawer" data-open="false">
         <fieldset id="download-fs">
             <legend>Download Chat</legend>
-            <label for="chat-title">Title</label>
-            <input type="text" id="chat-title" value="Chat" placeholder="Title your chat">
-            <button id="download-button">
-                <span class="material-icons-outlined">file_download</span>
-            </button>
+            <div id="chat-field">
+                <input type="text" id="chat-title" placeholder="Title your chat" aria-label="chat title">
+                <button id="download-button">
+                    <span class="material-icons-outlined">file_download</span>
+                </button>
+            </div>
         </fieldset>
         <button id="close-button">
             <span class="material-icons-outlined">close</span>
@@ -45,6 +46,7 @@
             <legend>User Message</legend>
                 <textarea id="prompt-text" rows="6" placeholder="Enter your prompt here" 
                     aria-label="prompt" tabindex="-1"></textarea>
+                <input type="checkbox" id="new-button"><label for="new-button">Start new chat</label>
         </fieldset id="download-fs">
         <div id="buttons">
             <button class="button" id="send-button" tabindex="-1">
