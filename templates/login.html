@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Login</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <form action="/login" method="post" id="login-form">
+        <fieldset>
+            <legend>Login</legend>
+            <div class="login-field">
+                {{ form.username.label }} {{ form.username() }}
+            </div>
+            <div class="login-field">
+                {{ form.password.label }} {{ form.password() }}
+            </div>
+        </fieldset>
+        <input type="submit" value="Login">
+    </form>
+
+</body>
+</html>

@@ -108,11 +108,6 @@ addEventListener("load", async () => {
     }
 });
 
-// window.addEventListener("unload", async () => {
-//     document.cookie = "chatsession=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-//     await fetch('/close_session')    
-// });
-
 sendButton.addEventListener("click", () => {
     if (promptText.value === "") {
         displayError("error", "Prompt is empty!")

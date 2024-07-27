@@ -7,6 +7,22 @@ body {
     background-color: rgb(11, 80, 107);
 }
 
+#login-form {
+    background-color: aquamarine;
+    margin-top: 30px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.login-field {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
 header {
     display: flex;
     align-items: center;
@@ -77,8 +93,8 @@ pre {
     gap: 10px;
     flex-direction: column;
     top: 20%;
-    left: -600px;
-    width: 33%;
+    left: -1000px;
+    width: 64%;
     background-color: rgb(174, 230, 129);
     z-index: 999;
     padding: 5px;
@@ -87,7 +103,7 @@ pre {
 }
 
 #drawer[data-open = "true"] {
-    left: 10%;
+    left: 18%;
 }
 
 #chat-field {
@@ -212,6 +228,7 @@ fieldset {
     }
     
     #drawer[data-open="true"] {
-        left: 30%;
+        left: 33%;
+        width: 33%
     }
 }

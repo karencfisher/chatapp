@@ -1,19 +1,52 @@
 import atexit
 import os
-from flask import Flask, jsonify, request, render_template, make_response
-from chat import Chat
+from dotenv import load_dotenv
+from flask import Flask, jsonify, request, render_template, make_response,\
+                  session, url_for, redirect
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import login_required
+
+from Chat.chat import Chat
+from Authentication.login import User, LoginForm
 
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Authentication/users.sqlite'
+load_dotenv()
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+db = SQLAlchemy(app)
+
 
 @app.route('/')
 def home():
+    # if session['logged_in']:
+    #     return redirect(url_for('/chat'))
+    return render_template('login.html', form=LoginForm())
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    user = User.query.filter_by(username=form.username.data).first()
+    if user and user.check_password(form.password.data):
+        session['logged_in'] = True
+        return redirect(url_for('index'))
+    return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('index'))
+
+@app.route('/chat')
+@login_required
+def chat():
     response = make_response(render_template('chatbot.html', model=llm.getModel()))
     if request.cookies.get('chatsession') is None:
         response.set_cookie('chatsession', os.urandom(24).hex())
     return response
 
 @app.route('/ask', methods=['POST'])
+@login_required
 def ask():
     try:
         session_id = request.cookies.get('chatsession')
@@ -25,6 +58,7 @@ def ask():
         return jsonify({"Error": str(ex)})
 
 @app.route('/conversation')
+@login_required
 def conversation():
     try:
         session_id = request.cookies.get('chatsession')
@@ -34,6 +68,7 @@ def conversation():
         return jsonify({"Error": str(ex)})
 
 @app.route('/clear_session')
+@login_required
 def close_session():
     try:
         session_id = request.cookies.get('chatsession')

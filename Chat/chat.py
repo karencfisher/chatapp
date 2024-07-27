@@ -1,27 +1,28 @@
 import json
 import os
-
-from context import Contexts
 import importlib
+from pathlib import Path
+
+from Chat.context import Contexts
 
 
 class Chat:
     def __init__(self):
         self.stdio = False
         
-        with open('model_config.json', 'r') as CONFIG_FILE:
+        with open(Path('Chat/model_config.json'), 'r') as CONFIG_FILE:
             self.config = json.load(CONFIG_FILE)
         
         # get system prompt
-        if os.path.exists('chat_system_prompt.txt'):
-            with open('chat_system_prompt.txt', 'r') as PRETEXT:
+        if os.path.exists(Path('Chat/chat_system_prompt.txt')):
+            with open(Path('Chat/chat_system_prompt.txt'), 'r') as PRETEXT:
                 self.pretext = PRETEXT.read()
         else:
                 self.pretext = "You are a helpful chatbot."
         
         # concatinate user profile if one exists
-        if os.path.exists('chat_user_profile.txt'):
-            with open('chat_user_profile.txt', 'r') as PROFILE:
+        if os.path.exists(Path('Chat/chat_user_profile.txt')):
+            with open(Path('Chat/chat_user_profile.txt'), 'r') as PROFILE:
                 profile = PROFILE.read()
             self.pretext += 'User profile:\n\n' + profile
         
@@ -30,7 +31,7 @@ class Chat:
 
         # load or connect to model
         print(f'Loading model {self.config["model"]}...')
-        provider = importlib.import_module(self.config['provider'].strip())
+        provider = importlib.import_module(f"LLM.{self.config['provider'].strip()}")
         self.model = provider.Model(self.config)
         print('Done!')
 

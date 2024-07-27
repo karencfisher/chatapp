@@ -1,7 +1,7 @@
 import os
 from groq import Groq
 from dotenv import load_dotenv
-from model_base import ModelBase
+from LLM.model_base import ModelBase
 
 
 class Model(ModelBase):
