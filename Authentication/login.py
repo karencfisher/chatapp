@@ -1,24 +1,23 @@
-from flask_sqlalchemy import SQLAlchemy
+import sqlite3
 from flask_bcrypt import Bcrypt
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired
+from pathlib import Path
 
 
-bcrypt = Bcrypt()
-db = SQLAlchemy()
+def check_login(username, password):
+    bcrypt = Bcrypt()
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
+    con = sqlite3.connect(Path('Authentication/users.sqlite'))
+    cur = con.cursor()
+    result = cur.execute(f"SELECT id, username, password FROM user WHERE username = '{username}' ").fetchone()
+    con.close()
 
-    def set_password(self, password):
-        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
-
-    def check_password(self, password):
-        return bcrypt.check_password_hash(self.password, password)
+    if result and bcrypt.check_password_hash(result[2], password):
+        return result
+    return None
     
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
+def get_user(id):
+    con = sqlite3.connect(Path('Authentication/users.sqlite'))
+    cur = con.cursor()
+    result = cur.execute(f"SELECT id, username, password FROM user WHERE id = '{id}' ").fetchone()
+    con.close()
+    return result

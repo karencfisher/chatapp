@@ -11,10 +11,12 @@
         <fieldset>
             <legend>Login</legend>
             <div class="login-field">
-                {{ form.username.label }} {{ form.username() }}
+                <label for="username">Username</label>
+                <input name="username" type="text">
             </div>
             <div class="login-field">
-                {{ form.password.label }} {{ form.password() }}
+                <label for="password">Password</label>
+                <input name="password" type="password">
             </div>
         </fieldset>
         <input type="submit" value="Login">

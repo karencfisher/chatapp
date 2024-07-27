@@ -1,41 +1,55 @@
 import atexit
 import os
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request, render_template, make_response,\
-                  session, url_for, redirect
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import login_required
+from flask import Flask, jsonify, request, render_template, make_response, redirect
+from flask_login import login_user, current_user, logout_user, login_required,\
+                  LoginManager, UserMixin
 
 from Chat.chat import Chat
-from Authentication.login import User, LoginForm
+from Authentication.login import check_login, get_user
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Authentication/users.sqlite'
 load_dotenv()
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-db = SQLAlchemy(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'home'  # Define the view for login page
 
+@login_manager.user_loader
+def load_user(user_id):
+    user = get_user(user_id)
+    if user:
+        return User(*user)
+    return None
+
+class User(UserMixin):
+    def __init__(self, id, username, password):
+        self.id = id
+        self.username = username
+        self.password = password
+    
 
 @app.route('/')
 def home():
-    # if session['logged_in']:
-    #     return redirect(url_for('/chat'))
-    return render_template('login.html', form=LoginForm())
+    if current_user.is_authenticated:
+        return redirect('/chat')
+    return render_template('login.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
-    form = LoginForm()
-    user = User.query.filter_by(username=form.username.data).first()
-    if user and user.check_password(form.password.data):
-        session['logged_in'] = True
-        return redirect(url_for('index'))
-    return render_template('login.html', form=form)
+    username = request.form['username']
+    password = request.form['password']
+    result = check_login(username, password)
+    if result is not None:
+        login_user(User(*result))
+        return redirect('/chat')
+    return render_template('login.html')
 
 @app.route('/logout')
 def logout():
-    session.pop('logged_in', None)
-    return redirect(url_for('index'))
+    logout_user()
+    return redirect('/')
 
 @app.route('/chat')
 @login_required
