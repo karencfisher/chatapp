@@ -2,5 +2,7 @@ numpy
 tiktoken
 ollama
 flask
+flask-login
+flask-bcrypt
 groq
 python-dotenv

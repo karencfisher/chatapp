@@ -188,6 +188,13 @@ downloadButton.addEventListener("click", () => {
     URL.revokeObjectURL(chatLog);
 });
 
+const closeButton = document.getElementById("close-button");
+closeButton.addEventListener("click", () => {
+    downloadBox.dataset.open = "false";
+    mask.dataset.open = "false";
+    boxOpen = false;
+});
+
 function displayError(type, msg) {
     const errorMsg = document.getElementById("error-msg");
     const errortxt = document.getElementById("error-txt");

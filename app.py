@@ -6,7 +6,7 @@ from flask_login import login_user, current_user, logout_user, login_required,\
                   LoginManager, UserMixin
 
 from Chat.chat import Chat
-from Authentication.login import check_login, get_user
+from Authentication.login import check_login, get_user, add_user, change_password
 
 
 app = Flask(__name__)
@@ -16,20 +16,23 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'home'  # Define the view for login page
 
+################ authentication ###########################################
+
 @login_manager.user_loader
 def load_user(user_id):
     user = get_user(user_id)
     if user:
-        return User(*user)
+        return User(user)
     return None
 
 class User(UserMixin):
-    def __init__(self, id, username, password):
-        self.id = id
-        self.username = username
-        self.password = password
+    def __init__(self, args):
+        self.id = args[0]
+        self.username = args[1]
+        self.password = args[2]
+        self.admin = args[3]
+        self.temp_pw = args[4]
     
-
 @app.route('/')
 def home():
     if current_user.is_authenticated:
@@ -42,7 +45,7 @@ def login():
     password = request.form['password']
     result = check_login(username, password)
     if result is not None:
-        login_user(User(*result))
+        login_user(User(result))
         return redirect('/chat')
     return render_template('login.html')
 
@@ -50,6 +53,8 @@ def login():
 def logout():
     logout_user()
     return redirect('/')
+
+################ protected routes ###########################################
 
 @app.route('/chat')
 @login_required
@@ -90,6 +95,36 @@ def close_session():
         return jsonify({"success": "cleared session"}), 200
     except Exception as ex:
         return jsonify({"Error": str(ex)})
+    
+@app.route('/add_user', methods=['GET', 'POST'])
+@login_required
+def add_user_form():
+    if request.method == 'POST':
+        if not current_user.admin:
+            return jsonify({"error": "Access Denied"}), 403
+        username = request.form['username']
+        password = request.form['password']
+        try:
+            add_user(username, password)
+        except ValueError:
+            return jsonify({"error": "Username already in use"}), 400
+        return jsonify({"success": "User added"}), 200
+
+    else:
+        if not current_user.admin:
+            return "<h1 style=\"color: red;\">Access Denied</h1>", 403
+        return render_template('add_user.html')
+    
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_pw():
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        change_password(current_user.id, new_password)
+    else:
+        return render_template('change_password.html')
+
+
 
 def close_server():
     llm.close_server()

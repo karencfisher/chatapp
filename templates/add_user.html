@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Login</title>
+    <title>Chat add user</title>
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <form action="/login" method="post" id="info-form">
+    <form action="/add_user" method="post" id="info-form">
         <fieldset>
-            <legend>Login</legend>
+            <legend>Add User</legend>
             <div class="info-field">
                 <label for="username">Username</label>
-                <input name="username" type="text">
+                <input name="username" id="username" type="text">
             </div>
             <div class="info-field">
                 <label for="password">Password</label>
-                <input name="password" type="password">
+                <input name="password" id="password" type="password">
             </div>
         </fieldset>
-        <input type="submit" value="Login">
+        <input type="submit" value="Add User">
     </form>
-
+    <script>
+        document.getElementById('username').value="";
+        document.getElementById('password').value="";
+    </script>
 </body>
 </html>
