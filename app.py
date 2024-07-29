@@ -32,6 +32,8 @@ class User(UserMixin):
         self.password = args[2]
         self.admin = args[3]
         self.temp_pw = args[4]
+        self.name = args[5]
+        self.location = args[6]
     
 @app.route('/')
 def home():
@@ -81,7 +83,9 @@ def ask():
 def conversation():
     try:
         session_id = request.cookies.get('chatsession')
-        dialog = llm.get_conversation(session_id)
+        name = current_user.name
+        location = current_user.location
+        dialog = llm.get_conversation(session_id, name, location)
         return jsonify(dialog), 200
     except Exception as ex:
         return jsonify({"Error": str(ex)})

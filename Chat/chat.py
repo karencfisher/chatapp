@@ -20,12 +20,6 @@ class Chat:
         else:
                 self.pretext = "You are a helpful chatbot."
         
-        # concatinate user profile if one exists
-        if os.path.exists(Path('Chat/chat_user_profile.txt')):
-            with open(Path('Chat/chat_user_profile.txt'), 'r') as PROFILE:
-                profile = PROFILE.read()
-            self.pretext += 'User profile:\n\n' + profile
-        
         # setup conversation contexts
         self.contexts = Contexts()
 
@@ -44,12 +38,13 @@ class Chat:
     def __getContext(self, session_id):
         return self.contexts.get_context(session_id)
     
-    def get_conversation(self, session_id):
+    def get_conversation(self, session_id, name, location):
         try:
             return self.contexts.get_full_conversation(session_id)
         except ValueError:
+            profile = f"User profile:\nname: {name}\nlocation: {location}"
             self.contexts.init_context(session_id, 
-                                      self.pretext, 
+                                      self.pretext + profile, 
                                       self.config['max_response'],
                                       self.config['context_window'])
             return []
