@@ -54,6 +54,7 @@ def login():
     return jsonify({"error": "Invalid login"}), 401
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect('/')
