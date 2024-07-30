@@ -29,13 +29,6 @@ header {
     justify-content: space-between;
 }
 
-#drawer-button {
-    background-color: transparent;
-    border-style: none;
-    cursor: pointer;
-    padding: 0;
-}
-
 h1 {
     margin: 0;
     font-size: 1.3rem;
@@ -100,6 +93,7 @@ pre {
     padding: 5px;
     z-index: 9999;
     transition: left .5s;
+    box-shadow: 8px 8px 8px rgba(20, 20, 20, .5), 5px 5px 5px rgba(20, 20, 20, .8);
 }
 
 #download-box[data-open = "true"] {

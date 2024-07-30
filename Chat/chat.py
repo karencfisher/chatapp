@@ -18,7 +18,7 @@ class Chat:
             with open(Path('Chat/chat_system_prompt.txt'), 'r') as PRETEXT:
                 self.pretext = PRETEXT.read()
         else:
-                self.pretext = "You are a helpful chatbot."
+            self.pretext = "You are a helpful chatbot."
         
         # setup conversation contexts
         self.contexts = Contexts()

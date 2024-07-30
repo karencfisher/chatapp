@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat add user</title>
     <link rel="stylesheet" href="../static/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"> 
+    <script src="../static/admin.js" defer></script>
 </head>
 <body>
     <form action="/add_user" method="post" id="info-form">
@@ -12,19 +14,19 @@
             <legend>Add User</legend>
             <div class="info-field">
                 <label for="username">Username</label>
-                <input name="username" id="username" type="text">
+                <input name="username" id="username" type="text" required>
             </div>
             <div class="info-field">
                 <label for="password">Password</label>
-                <input name="password" id="password" type="text">
+                <input name="password" id="password" type="text" required>
             </div>
             <div class="info-field">
                 <label for="name">Name</label>
-                <input name="name" id="name" type="text">
+                <input name="name" id="name" type="text" required>
             </div>
             <div class="info-field">
                 <label for="loacation">Location</label>
-                <input name="location" id="location" type="text">
+                <input name="location" id="location" type="text" required>
             </div>
 
         </fieldset>
@@ -34,5 +36,6 @@
         document.getElementById('username').value="";
         document.getElementById('password').value="";
     </script>
+    {% include 'error.html' %}
 </body>
 </html>

@@ -48,8 +48,10 @@ def login():
     result = check_login(username, password)
     if result is not None:
         login_user(User(result))
-        return redirect('/chat')
-    return render_template('login.html')
+        if current_user.temp_pw:
+            return jsonify({"redirect": "/change_password"}), 302
+        return jsonify({"redirect": "/chat"}), 302
+    return jsonify({"error": "Invalid login"}), 401
 
 @app.route('/logout')
 def logout():
@@ -76,7 +78,7 @@ def ask():
         response = llm.chat(session_id, message)
         return jsonify({"message": response}), 200
     except Exception as ex:
-        return jsonify({"Error": str(ex)})
+        return jsonify({"Error": str(ex)}), 500
 
 @app.route('/conversation')
 @login_required
@@ -88,7 +90,7 @@ def conversation():
         dialog = llm.get_conversation(session_id, name, location)
         return jsonify(dialog), 200
     except Exception as ex:
-        return jsonify({"Error": str(ex)})
+        return jsonify({"Error": str(ex)}), 500
 
 @app.route('/clear_session')
 @login_required
@@ -98,7 +100,7 @@ def close_session():
         llm.clear_session(session_id)
         return jsonify({"success": "cleared session"}), 200
     except Exception as ex:
-        return jsonify({"Error": str(ex)})
+        return jsonify({"Error": str(ex)}), 500
     
 @app.route('/add_user', methods=['GET', 'POST'])
 @login_required
@@ -108,8 +110,10 @@ def add_user_form():
             return jsonify({"error": "Access Denied"}), 403
         username = request.form['username']
         password = request.form['password']
+        name = request.form['name']
+        location = request.form['location']
         try:
-            add_user(username, password)
+            add_user(username, password, name, location)
         except ValueError:
             return jsonify({"error": "Username already in use"}), 400
         return jsonify({"success": "User added"}), 200
@@ -125,6 +129,7 @@ def change_pw():
     if request.method == 'POST':
         new_password = request.form['new_password']
         change_password(current_user.id, new_password)
+        return jsonify({"redirect": "/chat"}), 302
     else:
         return render_template('change_password.html')
 
