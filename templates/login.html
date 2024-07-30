@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Login</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <script src="../static/admin.js" defer></script>
+</head>
+<body>
+    <form action="/login" method="post" id="info-form">
+        <fieldset>
+            <legend>Login</legend>
+            <div class="info-field">
+                <label for="username">Username</label>
+                <input name="username" type="text" required>
+            </div>
+            <div class="info-field">
+                <label for="password">Password</label>
+                <input name="password" type="password" required>
+            </div>
+        </fieldset>
+        <input type="submit" value="Login">
+    </form>
+    {% include 'error.html' %}
+</body>
+</html>

@@ -1,5 +1,5 @@
 import ollama
-from model_base import ModelBase
+from LLM.model_base import ModelBase
 
 
 class Model(ModelBase):

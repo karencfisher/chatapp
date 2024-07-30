@@ -108,11 +108,6 @@ addEventListener("load", async () => {
     }
 });
 
-// window.addEventListener("unload", async () => {
-//     document.cookie = "chatsession=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-//     await fetch('/close_session')    
-// });
-
 sendButton.addEventListener("click", () => {
     if (promptText.value === "") {
         displayError("error", "Prompt is empty!")
@@ -134,27 +129,28 @@ promptButton.addEventListener("click", () => {
     togglePrompt();
 });
 
-const drawerButton = document.getElementById("drawer-button");
-const drawer = document.getElementById("drawer");
-let drawerOpen = false;
-drawerButton.addEventListener("click", () => {
-    drawerOpen = !drawerOpen;
-    drawer.dataset.open = `${drawerOpen}`;
-    mask.dataset.open = `${drawerOpen}`;
+const downloadBoxButton = document.getElementById("download-box-button");
+const downloadBox = document.getElementById("download-box");
+let boxOpen = false;
+downloadBoxButton.addEventListener("click", () => {
+    boxOpen = !boxOpen;
+    downloadBox.dataset.open = `${boxOpen}`;
+    mask.dataset.open = `${boxOpen}`;
 });
 
-const closeButton = document.getElementById("close-button");
-closeButton.addEventListener("click", () => {
-    drawer.dataset.open = "false";
-    mask.dataset.open = "false";
-    drawerOpen = false;
+const logoutButton = document.getElementById("logout-button");
+logoutButton.addEventListener("click", async () => {
+    response = await fetch("/logout");
+    if (response.status === 200) {
+        window.location.href = response.url;
+    }
 });
 
 mask.addEventListener("click", () => {
-    if (drawer.dataset.open === "true") {
-        drawer.dataset.open = "false";
+    if (downloadBox.dataset.open === "true") {
+        downloadBox.dataset.open = "false";
         mask.dataset.open = "false";
-        drawerOpen = false;
+        boxOpen = false;
     }
     else if (prompt.dataset.open === "true") {
         togglePrompt();
@@ -190,6 +186,13 @@ downloadButton.addEventListener("click", () => {
     a.click();
     URL.revokeObjectURL(a.href);
     URL.revokeObjectURL(chatLog);
+});
+
+const closeButton = document.getElementById("close-button");
+closeButton.addEventListener("click", () => {
+    downloadBox.dataset.open = "false";
+    mask.dataset.open = "false";
+    boxOpen = false;
 });
 
 function displayError(type, msg) {

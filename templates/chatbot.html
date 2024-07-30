@@ -13,20 +13,25 @@
 <body>
     <main id="container">
         <header>
-            <button id="drawer-button">
-                <span class="material-icons-outlined" id="hamburger">menu</span>
-            </button>
             <div id="title">
                 <h1>Chat using {{ model }}</h1>
             </div>
         </header>
         <div id="conversation"></div>
-        <button id="prompt-button">
-            <span class="material-icons-outlined">chat</span>
-        </button>
-    </main>
+        <div id="fab-buttons">
+            <button class="fab-button" id="prompt-button">
+                <span class="material-icons-outlined">chat</span>
+            </button>
+            <button class="fab-button" id="download-box-button">
+                <span class="material-icons-outlined">download</span>
+            </button>
+            <button class="fab-button" id="logout-button">
+                <span class="material-icons-outlined">logout</span>
+            </button>
+        </div>
+    </main>   
 
-    <div id="drawer" data-open="false">
+    <div id="download-box" data-open="false">
         <fieldset id="download-fs">
             <legend>Download Chat</legend>
             <div id="chat-field">
@@ -44,9 +49,9 @@
     <div id="prompt" data-open="false">
         <fieldset>
             <legend>User Message</legend>
-                <textarea id="prompt-text" rows="6" placeholder="Enter your prompt here" 
-                    aria-label="prompt" tabindex="-1"></textarea>
-                <input type="checkbox" id="new-button"><label for="new-button">Start new chat</label>
+            <textarea id="prompt-text" rows="6" placeholder="Enter your prompt here" 
+                aria-label="prompt" tabindex="-1"></textarea>
+            <input type="checkbox" id="new-button"><label for="new-button">Start new chat</label>
         </fieldset id="download-fs">
         <div id="buttons">
             <button class="button" id="send-button" tabindex="-1">

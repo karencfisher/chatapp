@@ -7,17 +7,26 @@ body {
     background-color: rgb(11, 80, 107);
 }
 
+#info-form {
+    background-color: aquamarine;
+    margin-top: 30px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info-field {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
 header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-#drawer-button {
-    background-color: transparent;
-    border-style: none;
-    cursor: pointer;
-    padding: 0;
 }
 
 h1 {
@@ -71,23 +80,24 @@ pre {
     background-color: rgb(174, 230, 129);
 }
 
-#drawer {
+#download-box {
     position: fixed;
     display: flex;
     gap: 10px;
     flex-direction: column;
     top: 20%;
-    left: -600px;
-    width: 33%;
+    left: -1000px;
+    width: 80%;
     background-color: rgb(174, 230, 129);
     z-index: 999;
     padding: 5px;
     z-index: 9999;
     transition: left .5s;
+    box-shadow: 8px 8px 8px rgba(20, 20, 20, .5), 5px 5px 5px rgba(20, 20, 20, .8);
 }
 
-#drawer[data-open = "true"] {
-    left: 10%;
+#download-box[data-open = "true"] {
+    left: 8%;
 }
 
 #chat-field {
@@ -155,12 +165,13 @@ fieldset {
     display: block;
 }
 
-#prompt-button {
-    position: relative;
+.fab-button {
+    position: absolute;
     width: fit-content;         
-    bottom: 60px;
-    left: 85%;
+    bottom: 18%;
+    right: 5%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     border-radius: 20px;
     padding: 5px;
@@ -169,7 +180,23 @@ fieldset {
     box-shadow: 8px 8px 8px rgba(20, 20, 20, .5), 5px 5px 5px rgba(20, 20, 20, .8);
 }
 
+#download-box-button {
+    bottom: 11%;
+}
+
+#logout-button {
+    bottom: 3%;
+}
+
 #prompt-button:hover, #prompt-button:focus {
+    background-color: rgb(233, 236, 13);
+}
+
+#download-box-button:hover, #prompt-button:focus {
+    background-color: rgb(233, 236, 13);
+}
+
+#logout-button:hover, #prompt-button:focus {
     background-color: rgb(233, 236, 13);
 }
 
@@ -207,11 +234,12 @@ fieldset {
         width: 30%;
     }
 
-    #prompt-button {
-        left: 92%;
+    #download-box {
+        width: 33%
+    }
+
+    #download-box[data-open = "true"] {
+        left: 33%;
     }
     
-    #drawer[data-open="true"] {
-        left: 30%;
-    }
 }
