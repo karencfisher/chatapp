@@ -7,6 +7,9 @@ You have access to the following tools:
 
 {tools}
 
+Use them freely, whenever you are asked of specific or timely information, instead of relying on
+your training data.
+
 To use a tool, please use the following format:
 
 ```

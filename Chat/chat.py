@@ -52,11 +52,10 @@ class Chat:
         with open(Path('Chat/instructions.txt'), 'r') as FILE:
             self.instructions = FILE.read()
 
-        if os.path.exists(Path('Chat/tools.json')):
-            with open(Path('Chat/tools.json'), 'r') as FILE:
-                self.tools = json.load(FILE)
+        if os.path.exists(Path('Chat/tools.py')):
+            self.tools = importlib.import_module("Chat.tools")
         else:
-            self.tools = []
+            self.tools = None
 
         print(f'Loading model {self.config["model"]}...')
         provider = importlib.import_module(f"LLM.{self.config['provider'].strip()}")
@@ -83,14 +82,14 @@ class Chat:
             )
         ]
 
-        for tool in self.tools:
-            module = importlib(f'langchain_community.tools import {tool["module"]}')
-            new_tool = Tool.from_function(
-                name=tool['name'],
-                description=tool['description'],
-                func=module.run
-            )
-            tools.append(new_tool)
+        if self.tools is not None:
+            for tool in self.tools.tools:
+                new_tool = Tool.from_function(
+                    name=tool['name'],
+                    description=tool['description'],
+                    func=tool['func']
+                )
+                tools.append(new_tool)
 
         instructions = f'{self.persona}\n\n{self.instructions}'
         agent_prompt = PromptTemplate.from_template(instructions)
