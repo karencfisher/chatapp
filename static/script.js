@@ -2,7 +2,7 @@ const conversation = document.getElementById("conversation");
 function addMessage(msg, role) {
     const htmlContent = marked.parse(msg);
     const msgDiv = document.createElement("div");
-    if (role === "AI" || role == 'assistant') {
+    if (role.toLowerCase() === "ai") {
         msgDiv.classList.add("AI-message");
     }
     else {

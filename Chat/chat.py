@@ -9,6 +9,7 @@ from langchain.tools import Tool
 from langchain_community.chat_message_histories import FileChatMessageHistory
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_core.messages import HumanMessage, AIMessage
 
 
 class Agents:
@@ -115,7 +116,17 @@ class Chat:
         return self.config['model']
 
     def get_conversation(self):
-        return []
+        history = FileChatMessageHistory(Path(f'Conversations/{self.user_profile["username"]}.json'))
+        conversation = []
+        for item in history.messages:
+            message = {}
+            if isinstance(item, HumanMessage):
+                message['role'] = 'human'
+            else:
+                message['role'] = 'ai'
+            message['content'] = item.content
+            conversation.append(message)
+        return conversation
 
     def chat(self, message):
         response = self.chat_agent.invoke(
