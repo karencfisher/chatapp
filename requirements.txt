@@ -1,10 +1,13 @@
 numpy
 tiktoken
-ollama
 flask
 flask-login
 flask-bcrypt
-groq
 python-dotenv
+langchain
+langchain-community
+langchain-ollama
+langchain-groq
+langchain-core
 gunicorn
 

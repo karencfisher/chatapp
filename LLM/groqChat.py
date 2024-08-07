@@ -1,5 +1,5 @@
 import os
-from groq import Groq
+from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 from LLM.model_base import ModelBase
 
@@ -8,11 +8,10 @@ class Model(ModelBase):
     def __init__(self, config):
         super().__init__(config)
         load_dotenv()
-        self.client = Groq(api_key=os.getenv('GROQ_API_KEY'))
+        self.__client = ChatGroq(api_key=os.getenv('GROQ_API_KEY'),
+                               model_name=self.config['model'],
+                               temperature=self.config['temperature'])
 
-    def chat(self, prompt):
-        response = self.client.chat.completions.create(model=self.config['model'], 
-                                                       messages=prompt,
-                                                       max_tokens=self.config["max_response"],
-                                                       temperature=self.config['temperature'])
-        return response.choices[0].message.content
+    def chat(self):
+        return self.__client
+        
