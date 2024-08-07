@@ -8,7 +8,8 @@ You have access to the following tools:
 {tools}
 
 Use them freely, whenever you are asked of specific or timely information, instead of relying on
-your training data.
+your training data. Think each step through and use tools individually or in sequence to accomplish
+a task.
 
 To use a tool, please use the following format:
 
