@@ -4,6 +4,6 @@ tools = [
     {
         "func": DuckDuckGoSearchRun().run,
         "name": "search",
-        "description": "search the web for any current information past your training"
+        "description": "search the web for any current information to suppliment your previous training"
     }
 ]

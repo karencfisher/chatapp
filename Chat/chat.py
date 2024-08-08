@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 import os
 import importlib
+import tiktoken
 
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain.schema import StrOutputParser
@@ -10,6 +11,38 @@ from langchain_community.chat_message_histories import FileChatMessageHistory
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.messages import messages_to_dict
+
+
+class FileChatMessageHistoryTrim(FileChatMessageHistory):
+    """Overriding behavior in the parent class to return messages within
+       a limited context window"""
+    def __init__(self, file_path, limit):
+        super().__init__(file_path)
+        self.limit = limit
+
+    @property
+    def messages(self):
+        messages = super().messages
+        messages_trimmed = self.__get_trimmed_messages(messages)
+        return messages_trimmed
+    
+    def add_message(self, message):
+        messages_saved = super().messages
+        messages = messages_to_dict(messages_saved)
+        messages.append(messages_to_dict([message])[0])
+        self.file_path.write_text(json.dumps(messages))
+    
+    def __get_trimmed_messages(self, messages):
+        encoder = tiktoken.get_encoding('p50k_base')
+        trimmed_messages = []
+        token_count = 0
+        for message in messages[::-1]:
+            token_count += len(encoder.encode(message.content))
+            if token_count > self.limit:
+                break
+            trimmed_messages.insert(0, message)
+        return trimmed_messages
 
 
 class Agents:
@@ -102,7 +135,10 @@ class Chat:
         )
 
         def get_memory(session_id):
-            return FileChatMessageHistory(Path(f'Conversations/{session_id}.json'))
+            limit = self.config['context_window'] - self.config['max_response']
+            conversation = FileChatMessageHistoryTrim(Path(f'Conversations/{session_id}.json'),
+                                                      limit)
+            return conversation
 
         self.chat_agent = RunnableWithMessageHistory(
             agent_executor,
@@ -135,5 +171,5 @@ class Chat:
         return response['output']
 
     def clear_session(self):
-        history = FileChatMessageHistory(Path(f'Chat/Conversations/{self.user_profile["username"]}.json'))
+        history = FileChatMessageHistory(Path(f'Conversations/{self.user_profile["username"]}.json'))
         history.clear()
