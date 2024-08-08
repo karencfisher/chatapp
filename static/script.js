@@ -25,6 +25,10 @@ async function getResponse(prompt) {
             }
         );
         const contents = await result.json();
+        if (result.status !== 200) {
+            displayError("error", `Error sending message to model. Might be offline?`);
+            return "";
+        }
         return contents.message;
     }
     catch(error) {
@@ -58,7 +62,9 @@ async function sendPrompt(new_chat) {
     let result = null;
     try {
         result = await getResponse(prompt);
-        addMessage(result, "AI");
+        if (result !== "") {
+            addMessage(result, "AI");
+        }
     }
     catch(error) {
         displayError("error", `Error: ${error}`)
