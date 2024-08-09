@@ -10,8 +10,7 @@ from langchain.tools import Tool
 from langchain_community.chat_message_histories import FileChatMessageHistory
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_core.messages import HumanMessage, AIMessage
-from langchain_core.messages import messages_to_dict
+from langchain_core.messages import HumanMessage, AIMessage, messages_to_dict
 
 
 class FileChatMessageHistoryTrim(FileChatMessageHistory):

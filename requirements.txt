@@ -8,6 +8,7 @@ langchain
 langchain-community
 langchain-ollama
 langchain-groq
+langchain-openai
 langchain-core
 gunicorn
 
