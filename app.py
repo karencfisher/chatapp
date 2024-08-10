@@ -1,4 +1,5 @@
 import os
+import json
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request, render_template, make_response, redirect
 from flask_login import login_user, current_user, logout_user, login_required,\
@@ -77,7 +78,7 @@ def chat():
 def ask():
     try:
         data = request.get_json()
-        message = data.get('message')
+        message = json.dumps(data.get('message'))
         response = agents.chat(current_user.username, message)
         return jsonify({"message": response}), 200
     except Exception as ex:

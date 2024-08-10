@@ -156,9 +156,11 @@ class Chat:
             message = {}
             if isinstance(item, HumanMessage):
                 message['role'] = 'human'
+                item_content = json.loads(item.content)
+                message['content'] = item_content['content']
             else:
                 message['role'] = 'ai'
-            message['content'] = item.content
+                message['content'] = item.content
             conversation.append(message)
         return conversation
 

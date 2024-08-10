@@ -10,5 +10,6 @@ langchain-ollama
 langchain-groq
 langchain-openai
 langchain-core
+duckduckgo-search
 gunicorn
 

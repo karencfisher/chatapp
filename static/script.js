@@ -13,8 +13,15 @@ function addMessage(msg, role) {
     conversation.scrollTop = conversation.scrollHeight;
 }
 
+function localDateTime() {
+    const currentDate = new Date();
+    const dateString = currentDate.toISOString();
+    return currentDate.toLocaleString()
+}
+
 async function getResponse(prompt) {
-    const query = { message: prompt };
+    const message = {localTimestamp: localDateTime(), content: prompt};
+    const query = { message: message };
     try {
         const result = await fetch(
             "/ask",
