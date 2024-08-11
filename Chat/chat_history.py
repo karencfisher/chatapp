@@ -20,7 +20,7 @@ class FileChatHistory(BaseChatMessageHistory):
             for line in FILE:
                 raw_message = json.loads(line.strip())
                 message = messages_from_dict([raw_message])[0]
-                self.add_message(message, False)
+                self.add_message(message, write_through=False)
         self.__trim_cache_messages()
 
     @property
@@ -35,9 +35,9 @@ class FileChatHistory(BaseChatMessageHistory):
         encoder = tiktoken.get_encoding('p50k_base')
         self.__cache.append(message)
         self.__cache_token_count += len(encoder.encode(message.content))
-        self.__trim_cache_messages()
 
         if write_through:
+            self.__trim_cache_messages()
             with open(self.file_path, 'a') as FILE:
                 FILE.write(f'{json.dumps(messages_to_dict([message])[0])}\n')
 
