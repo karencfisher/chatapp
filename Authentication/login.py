@@ -33,7 +33,8 @@ def add_user(username, password, name, location):
     result = cursor.execute(f"SELECT COUNT(username) FROM user\
                              WHERE username = '{username}';").fetchone()
     if result[0] > 0:
-        sql = f"UPDATE user SET password = '{hashed_pw}', name = '{name}', location = '{location}' \
+        sql = f"UPDATE user SET password = '{hashed_pw}', name = '{name}', \
+                location = '{location}', temp_pw = 1 \
                 WHERE username = '{username}';"
     else:
         sql = f"INSERT INTO user (username, password, temp_pw, name, location) \

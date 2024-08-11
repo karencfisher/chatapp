@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request, render_template, make_response, redir
 from flask_login import login_user, current_user, logout_user, login_required,\
                   LoginManager, UserMixin
 
-from Chat.chat import Chat, Agents
+from Chat.chat import Agents
 from Authentication.login import check_login, get_user, add_user, change_password
 
 
