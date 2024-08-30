@@ -1,6 +1,6 @@
 {
-    "provider": "groqChat",
-    "model": "llama3-8b-8192",
+    "provider": "openaiChat",
+    "model": "gpt-4o-mini",
     "context_window": 8192,
     "max_response": 512,
     "temperature": 0.5

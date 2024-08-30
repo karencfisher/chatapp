@@ -2,7 +2,7 @@ const conversation = document.getElementById("conversation");
 function addMessage(msg, role) {
     const htmlContent = marked.parse(msg);
     const msgDiv = document.createElement("div");
-    if (role === "AI" || role == 'assistant') {
+    if (role.toLowerCase() === "ai") {
         msgDiv.classList.add("AI-message");
     }
     else {
@@ -13,8 +13,15 @@ function addMessage(msg, role) {
     conversation.scrollTop = conversation.scrollHeight;
 }
 
+function localDateTime() {
+    const currentDate = new Date();
+    const dateString = currentDate.toISOString();
+    return currentDate.toLocaleString()
+}
+
 async function getResponse(prompt) {
-    const query = { message: prompt };
+    const message = {localTimestamp: localDateTime(), content: prompt};
+    const query = { message: message };
     try {
         const result = await fetch(
             "/ask",
@@ -25,6 +32,10 @@ async function getResponse(prompt) {
             }
         );
         const contents = await result.json();
+        if (result.status !== 200) {
+            displayError("error", `Error sending message to model. Might be offline?`);
+            return "";
+        }
         return contents.message;
     }
     catch(error) {
@@ -58,7 +69,9 @@ async function sendPrompt(new_chat) {
     let result = null;
     try {
         result = await getResponse(prompt);
-        addMessage(result, "AI");
+        if (result !== "") {
+            addMessage(result, "AI");
+        }
     }
     catch(error) {
         displayError("error", `Error: ${error}`)

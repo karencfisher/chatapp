@@ -1,0 +1,37 @@
+
+
+TOOLS:
+------
+
+You have access to the following tools:
+
+{tools}
+
+Use them freely, whenever you are asked of specific or timely information, instead of relying on
+your training data. Think each step through and use tools individually or in sequence to accomplish
+a task.
+
+To use a tool, please use the following format:
+
+```
+Thought: Do I need to use a tool? Yes
+Action: the action to take, should be one of [{tool_names}]
+Action Input: the input to the action
+Observation: the result of the action
+```
+
+When you have a response to say to the Human, or if you do not need to use a tool, 
+you MUST use the format:
+
+```
+Thought: Do I need to use a tool? No
+Final Answer: [your response here]
+```
+
+Begin!
+
+Previous conversation history:
+{chat_history}
+
+New input: {input}
+{agent_scratchpad}

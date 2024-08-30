@@ -1,11 +1,11 @@
-import atexit
 import os
+import json
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request, render_template, make_response, redirect
 from flask_login import login_user, current_user, logout_user, login_required,\
                   LoginManager, UserMixin
 
-from Chat.chat import Chat
+from Chat.chat import Agents
 from Authentication.login import check_login, get_user, add_user, change_password
 
 
@@ -48,6 +48,12 @@ def login():
     result = check_login(username, password)
     if result is not None:
         login_user(User(result))
+        user_profile = {
+            'username': current_user.username,
+            'name': current_user.name,
+            'location': current_user.location
+        }
+        agents.add_agent(user_profile)
         if current_user.temp_pw:
             return jsonify({"redirect": "/change_password"}), 302
         return jsonify({"redirect": "/chat"}), 302
@@ -56,6 +62,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    agents.remove_agent(current_user.username)
     logout_user()
     return redirect('/')
 
@@ -64,19 +71,15 @@ def logout():
 @app.route('/chat')
 @login_required
 def chat():
-    response = make_response(render_template('chatbot.html', model=llm.getModel()))
-    if request.cookies.get('chatsession') is None:
-        response.set_cookie('chatsession', os.urandom(24).hex())
-    return response
+    return render_template('chatbot.html')
 
 @app.route('/ask', methods=['POST'])
 @login_required
 def ask():
     try:
-        session_id = request.cookies.get('chatsession')
         data = request.get_json()
-        message = data.get('message')
-        response = llm.chat(session_id, message)
+        message = json.dumps(data.get('message'))
+        response = agents.chat(current_user.username, message)
         return jsonify({"message": response}), 200
     except Exception as ex:
         return jsonify({"Error": str(ex)}), 500
@@ -85,10 +88,7 @@ def ask():
 @login_required
 def conversation():
     try:
-        session_id = request.cookies.get('chatsession')
-        name = current_user.name
-        location = current_user.location
-        dialog = llm.get_conversation(session_id, name, location)
+        dialog = agents.get_conversation(current_user.username)
         return jsonify(dialog), 200
     except Exception as ex:
         return jsonify({"Error": str(ex)}), 500
@@ -97,8 +97,7 @@ def conversation():
 @login_required
 def close_session():
     try:
-        session_id = request.cookies.get('chatsession')
-        llm.clear_session(session_id)
+        agents.clear_session(current_user.username)
         return jsonify({"success": "cleared session"}), 200
     except Exception as ex:
         return jsonify({"Error": str(ex)}), 500
@@ -134,12 +133,6 @@ def change_pw():
     else:
         return render_template('change_password.html')
 
-
-
-def close_server():
-    llm.close_server()
-
 if __name__ == '__main__':
-    llm = Chat()
-    atexit.register(close_server)
+    agents = Agents()
     app.run(debug=True, host='0.0.0.0', port=5005)
