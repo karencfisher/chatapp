@@ -50,7 +50,8 @@ tools = [
         "func": DuckDuckGoSearchResults().run,
         "name": "search",
         "description": "Search the web for any current information or to suppliment your previous \
-                        training. Input should be a search query. Output is a JSON array of the \
+                        training. Input should be a search query, and include user's current date and time \
+                        if appropriate to a time based query. Output is a JSON array of the \
                         query results."
     },
 
