@@ -25,6 +25,7 @@ you MUST use the format:
 
 ```
 Thought: Do I need to use a tool? No
+Action: General Chat
 Final Answer: [your response here]
 ```
 

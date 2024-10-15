@@ -82,6 +82,8 @@ def ask():
         response = agents.chat(current_user.username, message)
         return jsonify({"message": response}), 200
     except Exception as ex:
+        import traceback
+        traceback.print_exception(ex)
         return jsonify({"Error": str(ex)}), 500
 
 @app.route('/conversation')
